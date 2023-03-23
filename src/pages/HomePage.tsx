@@ -7,12 +7,12 @@ import Input from '@/components/Input';
 
 const Error = () => <p className="text-center text-red-600">Something went wrong...</p>;
 
+type FormFields = {
+  search: string;
+};
+
 export default function HomePage() {
-  const { register, watch } = useForm({
-    defaultValues: {
-      search: '',
-    },
-  });
+  const { register, watch } = useForm<FormFields>();
 
   const search = watch('search');
   const debouncedSearch = useDebounce(search);
@@ -26,7 +26,7 @@ export default function HomePage() {
     <div className="mx-auto flex h-screen w-screen flex-col items-center gap-5 pt-10">
       {isError && <Error />}
       <div className="relative w-[35rem]">
-        <Input register={register} placeholder="Search for Github username..." />
+        <Input {...register('search')} type="text" placeholder="Search for Github username..." />
         {isDropdownVisible && (
           <div className="absolute top-10 left-0 max-h-[12.5rem] w-full overflow-y-auto  bg-white shadow-md">
             {isFetching ? (
