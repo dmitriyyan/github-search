@@ -4,6 +4,21 @@
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "@components/*": [
+        "./components/*"
+      ],
+      "@pages/*": [
+        "./pages/*"
+      ],
+      "@store/*": [
+        "./store/*"
+      ],
+      "@models/*": [
+        "./models/*"
+      ],
+      "@hooks/*": [
+        "./hooks/*"
       ]
     }
   }
