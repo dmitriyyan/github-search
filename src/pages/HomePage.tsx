@@ -54,12 +54,9 @@ export default function HomePage() {
   };
 
   return (
-    <div
-      className="mx-auto flex h-full max-w-full flex-col items-center gap-5 pt-10"
-      onClick={handleClickOutside}
-    >
+    <div className="flex flex-1 flex-col items-center gap-5 pt-10" onClick={handleClickOutside}>
       {(isUsersError || isUserReposError) && <Error />}
-      <div className="relative w-[35rem]">
+      <div className="relative mx-auto w-[35rem]">
         <div ref={ref}>
           <Input
             {...register('search')}
@@ -69,7 +66,7 @@ export default function HomePage() {
             resetInput={handleInputReset}
           />
           {isDropdownVisible && (
-            <div className="absolute top-10 left-0 max-h-[12.5rem] w-full overflow-y-auto  bg-white shadow-md">
+            <div className="absolute top-10 left-0 max-h-[12.5rem] w-full overflow-y-auto bg-white shadow-md scrollbar-thin">
               {isUsersFetching ? (
                 <p className="h-10 text-center leading-10">Loading...</p>
               ) : (
