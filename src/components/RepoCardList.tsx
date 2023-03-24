@@ -1,21 +1,23 @@
-import { useAppActions } from '@/hooks/actions';
-import { useAppSelector } from '@/hooks/redux';
+import { useAppActions } from '@hooks/actions';
+import { useAppSelector } from '@hooks/redux';
+import { FavouriteRepo } from '@store/github/github.slice';
 import { Repo } from '@models/api';
 
 type Props = {
-  repos: Repo[];
+  repos: Repo[] | FavouriteRepo[];
 };
 
 export default function RepoCardList({ repos }: Props) {
   const { favourites } = useAppSelector((state) => state.github);
+  const favouritesIds = favourites.map((fav) => fav.id);
 
   const { addFavourite, removeFavourite } = useAppActions();
 
-  const handleFavouriteClick = (repoUrl: string) => {
-    if (favourites.includes(repoUrl)) {
-      removeFavourite(repoUrl);
+  const handleFavouriteClick = (repo: FavouriteRepo) => {
+    if (favouritesIds.includes(repo.id)) {
+      removeFavourite(repo.id);
     } else {
-      addFavourite(repoUrl);
+      addFavourite(repo);
     }
   };
 
@@ -36,7 +38,7 @@ export default function RepoCardList({ repos }: Props) {
           </a>
           <button
             className="rounded py-1 px-2 transition-all hover:shadow-md"
-            onClick={() => handleFavouriteClick(repo.html_url)}
+            onClick={() => handleFavouriteClick(repo)}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -45,7 +47,7 @@ export default function RepoCardList({ repos }: Props) {
               strokeWidth={1.5}
               stroke="currentColor"
               className={`h-5 w-5 transition-all ${
-                favourites.includes(repo.html_url) ? 'fill-yellow-300 stroke-yellow-300' : ''
+                favouritesIds.includes(repo.id) ? 'fill-yellow-300 stroke-yellow-300' : ''
               }`}
             >
               <path
