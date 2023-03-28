@@ -10,10 +10,12 @@ export type FavouriteRepo = Pick<
 >;
 
 type GithubState = {
+  username: string;
   favourites: FavouriteRepo[];
 };
 
 const initialState: GithubState = {
+  username: '',
   favourites: JSON.parse(localStorage.getItem(LS_FAV_KEY) ?? '[]'),
 };
 
@@ -35,6 +37,9 @@ export const githubSlice = createSlice({
     removeFavourite: (state, action: PayloadAction<number>) => {
       state.favourites = state.favourites.filter((repo) => repo.id !== action.payload);
       localStorage.setItem(LS_FAV_KEY, JSON.stringify(state.favourites));
+    },
+    setUsername: (state, action: PayloadAction<string>) => {
+      state.username = action.payload;
     },
   },
 });

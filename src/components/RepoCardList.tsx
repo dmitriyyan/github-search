@@ -1,4 +1,4 @@
-import { useAppActions } from '@hooks/actions';
+import useAppActions from '@hooks/actions';
 import { useAppSelector } from '@hooks/redux';
 import { FavouriteRepo } from '@store/github/github.slice';
 import { Repo } from '@models/api';

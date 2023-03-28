@@ -7,7 +7,7 @@ const actions = {
   ...githubActions,
 };
 
-export const useAppActions = () => {
+export default function useAppActions() {
   const dispatch = useAppDispatch();
   return bindActionCreators(actions, dispatch);
-};
+}

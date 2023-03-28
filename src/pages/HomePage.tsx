@@ -1,8 +1,10 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { useLazyGetUserReposQuery, useSearchUsersQuery } from '@store/github/github.api';
 import useDebounce from '@hooks/useDebounce';
+import useAppActions from '@hooks/actions';
+import { useAppSelector } from '@hooks/redux';
 import UsersList from '@components/UsersList';
 import Input from '@components/Input';
 import RepoCardList from '@components/RepoCardList';
@@ -11,11 +13,31 @@ const Error = () => <p className="text-center text-red-600">Something went wrong
 
 export default function HomePage() {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const { register, watch, resetField } = useForm({
+
+  const defaultSearch = useAppSelector((state) => state.github.username);
+
+  const { register, watch, resetField, getValues } = useForm({
     defaultValues: {
-      search: '',
+      search: defaultSearch,
     },
   });
+
+  const { setUsername } = useAppActions();
+
+  useEffect(() => {
+    return () => {
+      setUsername(getValues('search'));
+    };
+  }, []);
+
+  const [fetchRepos, { data: reposData, isFetching: isReposFetching, isError: isUserReposError }] =
+    useLazyGetUserReposQuery();
+
+  useEffect(() => {
+    if (defaultSearch !== '') {
+      fetchRepos(defaultSearch, true);
+    }
+  }, []);
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -29,9 +51,6 @@ export default function HomePage() {
   } = useSearchUsersQuery(debouncedSearch, {
     skip: debouncedSearch.length < 3,
   });
-
-  const [fetchRepos, { data: reposData, isFetching: isReposFetching, isError: isUserReposError }] =
-    useLazyGetUserReposQuery();
 
   const handleUserClick = (username: string) => {
     fetchRepos(username);
